@@ -34,14 +34,7 @@ limitations under the License.
 #include "tensorflow/compiler/tf2xla/const_analysis.h"
 #include "tensorflow/compiler/tf2xla/shape_util.h"
 #include "tensorflow/compiler/tf2xla/xla_compiler.h"
-#include "xla/client/local_client.h"
-#include "xla/pjrt/pjrt_client.h"
-#include "xla/pjrt/pjrt_future.h"
-#include "xla/pjrt/pjrt_stream_executor_client.h"
-#include "xla/pjrt/tracked_device_buffer.h"
-#include "xla/shape_util.h"
-#include "xla/status_macros.h"
-#include "xla/stream_executor/platform_manager.h"
+#include "tensorflow/core/common_runtime/device_factory.h"
 #include "tensorflow/core/common_runtime/dma_helper.h"
 #include "tensorflow/core/common_runtime/gpu/gpu_serving_device_selector.h"
 #include "tensorflow/core/common_runtime/gpu_device_context.h"
@@ -57,11 +50,20 @@ limitations under the License.
 #include "tensorflow/core/platform/status.h"
 #include "tensorflow/core/platform/statusor.h"
 #include "tensorflow/core/tfrt/common/async_value_tensor.h"
+#include "tensorflow/core/tfrt/common/pjrt_util.h"
 #include "tensorflow/core/util/stream_executor_util.h"
 #include "tsl/framework/device_id_utils.h"
 #include "tsl/framework/serving_device_selector_policies.h"
 #include "tsl/platform/status.h"
 #include "tsl/platform/statusor.h"
+#include "xla/client/local_client.h"
+#include "xla/pjrt/pjrt_client.h"
+#include "xla/pjrt/pjrt_future.h"
+#include "xla/pjrt/pjrt_stream_executor_client.h"
+#include "xla/pjrt/tracked_device_buffer.h"
+#include "xla/shape_util.h"
+#include "xla/status_macros.h"
+#include "xla/stream_executor/platform_manager.h"
 
 namespace tensorflow {
 namespace {
@@ -810,7 +812,9 @@ xla::ExecuteOptions GetPjRtExecuteOptions(
   options.launch_id = 1;
   // TODO(b/293186653): investigate we should turn on strict shape checking for
   // GPU.
-  if (device_type == DEVICE_GPU) {
+  if (device_type == DEVICE_GPU ||
+      (DeviceFactory::IsPluggableDevice(device_type.type_string()) &&
+       GetPjRtClient(device_type).ok())) {
     options.strict_shape_checking = false;
   }
   // Note: TF does not use PJRT host callbacks as of today. Setting this option
