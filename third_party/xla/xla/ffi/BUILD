@@ -138,12 +138,12 @@ cc_library(
     hdrs = ["attribute_map.h"],
     deps = [
         ":call_frame",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:errors",
     ],
 )

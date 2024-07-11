@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@bazel_skylib//lib:selects.bzl", "selects")
-load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "bool_setting")
+load("//third_party/bazel_skylib/lib:selects.bzl", "selects")
+load("//third_party/bazel_skylib/rules:common_settings.bzl", "bool_flag", "bool_setting")
 load("//xla/tsl:package_groups.bzl", "tsl_package_groups")
 load("//xla/tsl:tsl.bzl", "if_google", "if_oss")
 load("//xla/tsl:tsl.default.bzl", "tsl_google_bzl_deps")
@@ -505,9 +505,9 @@ bzl_library(
     srcs = ["tsl.bzl"],
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/bazel_skylib/lib:new_sets",
         "//third_party/compute_library:build_defs_bzl",
         "//xla/tsl/mkl:build_defs_bzl",
-        "@bazel_skylib//lib:new_sets",
         "@local_config_cuda//cuda:build_defs_bzl",
         "@local_config_rocm//rocm:build_defs_bzl",
         "@local_config_tensorrt//:build_defs_bzl",

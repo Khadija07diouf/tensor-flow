@@ -59,6 +59,7 @@ cc_library(
     tags = ["gpu"],
     deps = [
         ":opt_lib",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
         "//xla:debug_options_flags",
         "//xla:types",
         "//xla/hlo/ir:hlo",
@@ -79,7 +80,6 @@ cc_library(
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:string_view",
-        "@llvm-project//llvm:ir_headers",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:statusor",
     ] + if_gpu_is_configured([
@@ -179,8 +179,8 @@ lit_test_suite(
         "gpu_hlo_ptx.hlo": ["no_rocm"],
     },
     tools = [
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
         "//xla/tools:hlo-opt",
-        "@llvm-project//llvm:FileCheck",
     ],
 )
 
@@ -191,8 +191,8 @@ filegroup(
     data = [
         "gpu_specs/a100_80.txtpb",
         "gpu_specs/mi200.txtpb",
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
         "//xla/tools:hlo-opt",
-        "@llvm-project//llvm:FileCheck",
     ],
 )
 

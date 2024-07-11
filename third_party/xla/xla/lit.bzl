@@ -1,6 +1,6 @@
 """Helper rules for writing LIT tests."""
 
-load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//third_party/bazel_skylib/lib:paths.bzl", "paths")
 load("//xla/tsl:tsl.bzl", "if_oss")
 
 def enforce_glob(files, **kwargs):
@@ -157,7 +157,7 @@ def lit_test(
 
     tools_on_path_target_name = "_{}_tools_on_path".format(name)
 
-    llvm_symbolizer = "@llvm-project//llvm:llvm-symbolizer"
+    llvm_symbolizer = "//third_party/llvm/llvm-project/llvm:llvm-symbolizer"
     if llvm_symbolizer not in tools:
         tools.append(llvm_symbolizer)
 
@@ -185,11 +185,11 @@ def lit_test(
     lit_name = "lit_custom_" + name
     native.py_binary(
         name = lit_name,
-        main = "@llvm-project//llvm:utils/lit/lit.py",
-        srcs = ["@llvm-project//llvm:utils/lit/lit.py"],
+        main = "//third_party/llvm/llvm-project/llvm:utils/lit/lit.py",
+        srcs = ["//third_party/llvm/llvm-project/llvm:utils/lit/lit.py"],
         testonly = True,
         deps = [
-            "@llvm-project//llvm:lit_lib",
+            "//third_party/llvm/llvm-project/llvm:lit_lib",
             "@pypi_lit//:pkg",
         ],
     )

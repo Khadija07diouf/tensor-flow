@@ -48,7 +48,7 @@ py_test(
     deps = [
         ":check_contents",
         "//build_tools:test_utils",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ],
 )
 
@@ -63,7 +63,7 @@ py_test(
     deps = [
         ":diff_parser",
         "//build_tools:test_utils",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ],
 )
 
@@ -72,6 +72,6 @@ py_test(
     srcs = ["generate_compile_commands_test.py"],
     deps = [
         ":generate_compile_commands",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ],
 )

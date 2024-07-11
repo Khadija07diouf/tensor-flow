@@ -17,9 +17,9 @@ py_strict_library(
     srcs_version = "PY3",
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/py/ml_dtypes",
         "//third_party/py/numpy",
         "//xla:xla_data_proto_py",
-        "@ml_dtypes",
     ],
 )
 
@@ -58,9 +58,9 @@ py_strict_test(
     ],
     deps = [
         ":xla_shape",
+        "//third_party/py/absl/testing:absltest",
         "//third_party/py/numpy",
         "//xla:xla_data_proto_py",
-        "@absl_py//absl/testing:absltest",
     ],
 )
 
@@ -74,8 +74,8 @@ py_strict_test(
     ],
     deps = [
         ":xla_literal",
+        "//third_party/py/absl/testing:absltest",
         "//third_party/py/numpy",
         "//xla:xla_data_proto_py",
-        "@absl_py//absl/testing:absltest",
     ],
 )

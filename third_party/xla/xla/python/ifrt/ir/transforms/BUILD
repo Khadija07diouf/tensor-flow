@@ -1,4 +1,4 @@
-load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library")
+load("//third_party/llvm/llvm-project/mlir:tblgen.bzl", "gentbl_cc_library")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable")
 
 package(
@@ -19,10 +19,10 @@ gentbl_cc_library(
             "passes.h.inc",
         ),
     ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    tblgen = "//third_party/llvm/llvm-project/mlir:mlir-tblgen",
     td_file = "passes.td",
     deps = [
-        "@llvm-project//mlir:PassBaseTdFiles",
+        "//third_party/llvm/llvm-project/mlir:PassBaseTdFiles",
     ],
 )
 
@@ -40,16 +40,16 @@ cc_library(
     deps = [
         ":constants",
         ":passes_inc_gen",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla/python/ifrt/ir",
         "@com_google_absl//absl/container:flat_hash_set",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:Support",
     ],
 )
 
@@ -59,9 +59,9 @@ cc_library(
     hdrs = ["built_in_spmd_expansions.h"],
     compatible_with = get_compatible_with_portable(),
     deps = [
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/python/ifrt/ir/transforms/spmd_expanders:spmd_expander",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -69,5 +69,5 @@ cc_library(
     name = "constants",
     hdrs = ["constants.h"],
     compatible_with = get_compatible_with_portable(),
-    deps = ["@llvm-project//llvm:Support"],
+    deps = ["//third_party/llvm/llvm-project/llvm:Support"],
 )

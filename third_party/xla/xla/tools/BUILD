@@ -1,6 +1,5 @@
 # Tools and utilities that aid in XLA development and usage.
 
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
 load("@local_config_rocm//rocm:build_defs.bzl", "if_rocm_is_configured")
 load(
@@ -12,6 +11,7 @@ load(
     "@local_tsl//tsl/platform/default:cuda_build_defs.bzl",
     "if_cuda_is_configured",
 )
+load("//third_party/bazel_skylib/rules:build_test.bzl", "build_test")
 load(
     "//xla:xla.bzl",
     "xla_cc_binary",
@@ -602,6 +602,7 @@ xla_cc_binary(
     ],
     deps = [
         ":run_hlo_module_lib",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:debug_options_flags",
         "//xla/service:cpu_plugin",
         "//xla/service:hlo_module_config",
@@ -612,7 +613,6 @@ xla_cc_binary(
         "//xla/translate/stablehlo_to_hlo:translate",
         "//xla/tsl/util:command_line_flags",
         "@com_google_absl//absl/strings",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:path",
         "@local_tsl//tsl/platform:platform_port",
@@ -752,6 +752,11 @@ tsl_gpu_library(
     visibility = ["//visibility:public"],
     deps = [
         ":hlo_module_loader",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Parser",
+        "//third_party/stablehlo:register",
         "//xla:debug_options_flags",
         "//xla:shape_util",
         "//xla:util",
@@ -777,10 +782,6 @@ tsl_gpu_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Parser",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:env_time",
         "@local_tsl//tsl/platform:errors",
@@ -789,7 +790,6 @@ tsl_gpu_library(
         "@local_tsl//tsl/platform:status",
         "@local_tsl//tsl/platform:status_to_from_proto",
         "@local_tsl//tsl/platform:statusor",
-        "@stablehlo//:register",
     ] + if_cuda_is_configured([
         "//xla/service/gpu:nvptx_compiler",
         "//xla/service/gpu:nvptx_compiler_impl",

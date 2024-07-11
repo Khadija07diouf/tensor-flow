@@ -183,8 +183,8 @@ cc_library(
     hdrs = ["hlo_dfs_reachability.h"],
     deps = [
         ":hlo",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/algorithm:container",
-        "@llvm-project//llvm:Support",
     ],
 )
 

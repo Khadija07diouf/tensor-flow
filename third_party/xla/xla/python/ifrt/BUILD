@@ -89,6 +89,7 @@ cc_library(
         ":serdes",
         ":shape_proto_cc",
         ":sharding_proto_cc",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:util",
@@ -118,7 +119,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/lib/gtl:int_type",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
@@ -133,8 +133,8 @@ xla_cc_test(
     deps = [
         ":ifrt",
         ":mock",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
     ],
 )
 
@@ -229,9 +229,9 @@ xla_cc_test(
     deps = [
         ":ifrt",
         ":sharding_test_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla/python/ifrt/ir:sharding_param",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:status_matchers",
         "@local_tsl//tsl/platform:statusor",
@@ -371,6 +371,7 @@ cc_library(
     deps = [
         ":attribute_map",
         ":ifrt",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:test",
         "//xla/hlo/ir:hlo",
         "//xla/pjrt:pjrt_executable",
@@ -382,7 +383,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
         "@com_google_googletest//:gtest",
-        "@llvm-project//llvm:Support",
     ],
 )
 
@@ -393,6 +393,7 @@ cc_library(
     compatible_with = get_compatible_with_portable(),
     deps = [
         ":serdes_proto_cc",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/log:check",
@@ -400,7 +401,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -411,11 +411,11 @@ xla_cc_test(
     deps = [
         ":serdes",
         ":serdes_proto_cc",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:status_matchers",
         "@local_tsl//tsl/platform:statusor",
@@ -435,9 +435,9 @@ cc_library(
     deps = [
         ":ifrt",
         ":serdes",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:util",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
     ],
 )
 
@@ -449,10 +449,10 @@ cc_library(
         ":ifrt",
         ":serdes",
         ":sharding_serdes_proto_cc",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:string_view",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
     ],
     alwayslink = True,
@@ -492,9 +492,9 @@ xla_cc_test(
         ":ifrt",
         ":sharding_serdes",
         ":sharding_test_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/status:statusor",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -553,10 +553,10 @@ xla_cc_test(
         ":ifrt",
         ":sharding_serdes",
         ":sharding_test_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/functional:bind_front",
         "@com_google_absl//absl/status",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:status_matchers",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
@@ -570,12 +570,12 @@ cc_library(
     deps = [
         ":ifrt",
         ":test_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:status_macros",
         "//xla/tsl/concurrency:ref_count",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/lib/core:status_test_util",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
@@ -609,7 +609,7 @@ cc_library(
     hdrs = ["plugin_program.h"],
     deps = [
         ":ifrt",
-        "@llvm-project//llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:Support",
     ],
 )
 
@@ -619,11 +619,11 @@ cc_library(
     deps = [
         ":plugin_program",
         ":serdes",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:string_view",
-        "@llvm-project//llvm:Support",
     ],
     alwayslink = True,
 )
@@ -651,7 +651,7 @@ cc_library(
     compatible_with = get_compatible_with_portable(),
     deps = [
         ":ifrt",
-        "@llvm-project//llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:Support",
     ],
 )
 
@@ -677,10 +677,10 @@ cc_library(
         ":serdes",
         ":sharding_proto_cc",
         ":sharding_serdes",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:string_view",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
     ],
     alwayslink = True,
@@ -696,10 +696,10 @@ xla_cc_test(
         ":program_serdes",
         ":serdes",
         ":sharding_test_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "@com_google_absl//absl/functional:bind_front",
         "@com_google_absl//absl/status",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/lib/core:status_test_util",
         "@local_tsl//tsl/platform:status_matchers",
         "@local_tsl//tsl/platform:statusor",

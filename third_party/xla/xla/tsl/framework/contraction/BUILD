@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("@local_tsl//tsl/platform:rules_cc.bzl", "cc_library")
+load("//third_party/bazel_skylib/rules:common_settings.bzl", "bool_flag")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable")
 
 package(
@@ -103,9 +103,9 @@ cc_library(
         ],
     }),
     deps = [
+        "//third_party/eigen3",
         "//xla/tsl/framework/fixedpoint",
         "@com_google_absl//absl/base",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:dynamic_annotations",
     ] + select({
         ":disable_onednn_contraction_kernel_config": [],
@@ -140,9 +140,9 @@ cc_library(
     #     "//xla/tsl:internal",
     # ],
     deps = [
+        "//third_party/eigen3",
         "//xla/tsl/framework/fixedpoint",
         "@com_google_absl//absl/base",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:dynamic_annotations",
     ],
 )

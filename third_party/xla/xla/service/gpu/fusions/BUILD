@@ -14,6 +14,9 @@ cc_library(
     hdrs = ["in_place_dynamic_update_slice.h"],
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/hlo/ir:hlo",
         "//xla/service/gpu:hlo_fusion_analysis",
         "//xla/service/gpu:ir_emission_utils",
@@ -26,9 +29,6 @@ cc_library(
         "//xla/service/llvm_ir:ir_array",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -38,6 +38,7 @@ xla_cc_test(
     deps = [
         ":fusions",
         ":in_place_dynamic_update_slice",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
         "//xla/service/gpu/model:affine_map_printer",
@@ -46,7 +47,6 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "//xla/tests:xla_internal_test_main",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -56,6 +56,11 @@ cc_library(
     srcs = ["in_place_dynamic_update_slice_mlir.cc"],
     hdrs = ["in_place_dynamic_update_slice_mlir.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
@@ -68,11 +73,6 @@ cc_library(
         "//xla/service/gpu/model:indexing_analysis",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:TensorDialect",
     ],
 )
 
@@ -121,6 +121,10 @@ cc_library(
     local_defines = if_cuda_is_configured(["GOOGLE_CUDA=1"]),
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:AsmParser",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:shape_util",
         "//xla:util",
         "//xla:xla_data_proto_cc",
@@ -154,10 +158,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:AsmParser",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:statusor",
     ],
@@ -207,6 +207,10 @@ cc_library(
     hdrs = ["fusion_emitter.h"],
     visibility = ["//xla/service/gpu:__subpackages__"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:TargetParser",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:util",
@@ -228,10 +232,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:TargetParser",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:statusor",
     ],
@@ -284,6 +284,19 @@ cc_library(
     srcs = ["mlir_emitter_test_base.cc"],
     hdrs = ["mlir_emitter_test_base.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:AffineDialect",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:ComplexDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncExtensions",
+        "//third_party/llvm/llvm-project/mlir:GPUDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:MathDialect",
+        "//third_party/llvm/llvm-project/mlir:MemRefTransforms",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:SCFDialect",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla:xla_proto_cc",
         "//xla/hlo/ir:hlo",
         "//xla/mlir_hlo",
@@ -301,19 +314,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:string_view",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:AffineDialect",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:ComplexDialect",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:FuncExtensions",
-        "@llvm-project//mlir:GPUDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:MathDialect",
-        "@llvm-project//mlir:MemRefTransforms",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:SCFDialect",
-        "@llvm-project//mlir:TensorDialect",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -324,6 +324,8 @@ cc_library(
     hdrs = ["loop.h"],
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla:util",
         "//xla/hlo/ir:hlo",
@@ -342,8 +344,6 @@ cc_library(
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/numeric:bits",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:macros",
         "@local_tsl//tsl/platform:statusor",
     ],
@@ -355,6 +355,10 @@ cc_library(
     hdrs = ["loop_mlir.h"],
     deps = [
         ":loop",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:xla_data_proto_cc",
@@ -371,10 +375,6 @@ cc_library(
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:TensorDialect",
     ],
 )
 
@@ -401,6 +401,14 @@ cc_library(
     hdrs = ["scatter_mlir.h"],
     deps = [
         ":loop",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:DataLayoutInterfaces",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:SCFDialect",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
@@ -416,14 +424,6 @@ cc_library(
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:DataLayoutInterfaces",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:SCFDialect",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TensorDialect",
     ],
 )
 
@@ -450,6 +450,11 @@ cc_library(
     hdrs = ["transpose_mlir.h"],
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla:permutation_util",
         "//xla:shape_util",
         "//xla:util",
@@ -471,11 +476,6 @@ cc_library(
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TensorDialect",
     ],
 )
 
@@ -502,6 +502,7 @@ xla_cc_test(
     deps = [
         ":fusion_emitter",
         ":fusions",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:status_macros",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
@@ -512,7 +513,6 @@ xla_cc_test(
         "//xla/tests:xla_internal_test_main",
         "@com_google_absl//absl/status:statusor",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -524,6 +524,9 @@ cc_library(
     deps = [
         ":fusion_emitter",
         ":loop",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
@@ -540,9 +543,6 @@ cc_library(
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -553,6 +553,7 @@ xla_cc_test(
     deps = [
         ":fusions",
         ":scatter",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
         "//xla/service/gpu/model:affine_map_printer",
@@ -561,7 +562,6 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "//xla/tests:xla_internal_test_main",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -572,6 +572,8 @@ cc_library(
     hdrs = ["tiling_util.h"],
     visibility = ["//xla/service/gpu:__subpackages__"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
         "//xla:shape_util",
         "//xla:util",
         "//xla:xla_data_proto_cc",
@@ -586,8 +588,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -599,6 +599,9 @@ cc_library(
     visibility = ["//xla/service/gpu:__subpackages__"],
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla/hlo/ir:hlo",
@@ -623,9 +626,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:string_view",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -738,6 +738,9 @@ cc_library(
         ":reduction_base",
         ":thunk_util",
         ":tiling_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:util",
@@ -772,9 +775,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:status",
@@ -788,6 +788,7 @@ xla_cc_test(
     deps = [
         ":fusion_emitter",
         ":reduction",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/hlo/ir:hlo",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
@@ -800,7 +801,6 @@ xla_cc_test(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -811,6 +811,8 @@ cc_library(
     deps = [
         ":fusion_emitter",
         ":tiling_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla:union_find",
         "//xla:util",
@@ -834,8 +836,6 @@ cc_library(
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -846,6 +846,14 @@ cc_library(
     deps = [
         ":fusion_emitter",
         ":reduction_base",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:BufferizationInterfaces",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:SCFDialect",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
+        "//third_party/llvm/llvm-project/mlir:VectorDialect",
         "//xla:shape_util",
         "//xla:util",
         "//xla/hlo/ir:hlo",
@@ -866,14 +874,6 @@ cc_library(
         "@com_google_absl//absl/container:inlined_vector",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:BufferizationInterfaces",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:SCFDialect",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TensorDialect",
-        "@llvm-project//mlir:VectorDialect",
     ],
 )
 
@@ -903,6 +903,9 @@ cc_library(
     hdrs = ["concatenate.h"],
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla/hlo/ir:hlo",
         "//xla/service/gpu:hlo_fusion_analysis",
@@ -917,9 +920,6 @@ cc_library(
         "//xla/service/llvm_ir:loop_emitter",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:statusor",
     ],
@@ -931,6 +931,7 @@ xla_cc_test(
     deps = [
         ":concatenate",
         ":fusions",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
         "//xla/service/gpu/model:affine_map_printer",
@@ -939,7 +940,6 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "//xla/tests:xla_internal_test_main",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -949,6 +949,10 @@ cc_library(
     hdrs = ["concatenate_mlir.h"],
     deps = [
         ":concatenate",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla/hlo/ir:hlo",
         "//xla/service/gpu:hlo_fusion_analysis",
         "//xla/service/gpu:launch_dimensions",
@@ -960,10 +964,6 @@ cc_library(
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:TensorDialect",
     ],
 )
 
@@ -991,6 +991,9 @@ cc_library(
     deps = [
         ":fusion_emitter",
         ":tiling_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:permutation_util",
         "//xla:shape_util",
         "//xla:util",
@@ -1013,9 +1016,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -1026,6 +1026,7 @@ xla_cc_test(
     deps = [
         ":fusions",
         ":transpose",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:status_macros",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
@@ -1035,7 +1036,6 @@ xla_cc_test(
         "//xla/tests:xla_internal_test_main",
         "@com_google_absl//absl/status:statusor",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -1046,6 +1046,8 @@ cc_library(
     hdrs = ["input_slices.h"],
     deps = [
         ":fusion_emitter",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla:util",
         "//xla/hlo/ir:hlo",
@@ -1066,8 +1068,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:ir_headers",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -1077,6 +1077,11 @@ cc_library(
     srcs = ["input_slices_mlir.cc"],
     hdrs = ["input_slices_mlir.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:SCFDialect",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
         "//xla:util",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
@@ -1092,11 +1097,6 @@ cc_library(
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:SCFDialect",
-        "@llvm-project//mlir:TensorDialect",
     ],
 )
 
@@ -1121,6 +1121,7 @@ xla_cc_test(
     deps = [
         ":fusions",
         ":input_slices",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/service/gpu:gpu_device_info_for_tests",
         "//xla/service/gpu:hlo_fusion_analysis",
         "//xla/service/gpu/model:affine_map_printer",
@@ -1129,6 +1130,5 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "//xla/tests:xla_internal_test_main",
         "@com_google_googletest//:gtest",
-        "@llvm-project//mlir:IR",
     ],
 )

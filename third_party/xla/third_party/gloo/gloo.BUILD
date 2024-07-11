@@ -1,7 +1,7 @@
 # Description:
 #   Gloo is a collective communications library
 
-load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("//third_party/bazel_skylib/rules:expand_template.bzl", "expand_template")
 
 package(
     default_visibility = ["//visibility:public"],

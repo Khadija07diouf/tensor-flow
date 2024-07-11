@@ -11,6 +11,7 @@ cc_library(
     hdrs = ["sharding_conversions.h"],
     visibility = ["//xla/python/ifrt:friends"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
         "//xla/python/ifrt",
@@ -20,7 +21,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
     ],
 )
 

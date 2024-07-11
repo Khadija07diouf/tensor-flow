@@ -1,4 +1,3 @@
-load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load(
     "@local_tsl//tsl/platform:build_config_root.bzl",
     "if_static",
@@ -11,6 +10,7 @@ load(
     "@local_tsl//tsl/platform/default:cuda_build_defs.bzl",
     "if_cuda_is_configured",
 )
+load("//third_party/bazel_skylib/rules:common_settings.bzl", "bool_flag")
 load(
     "//xla:xla.bzl",
     "xla_cc_test",
@@ -284,6 +284,7 @@ cuda_only_cc_library(
         ":cuda_helpers",
         ":cuda_platform_id",
         ":cuda_stream",
+        "//third_party/eigen3",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:types",
@@ -314,7 +315,6 @@ cuda_only_cc_library(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
-        "@eigen_archive//:eigen3",
         "@local_config_cuda//cuda:cuda_headers",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
@@ -405,6 +405,7 @@ cuda_only_cc_library(
         ":cuda_platform_id",
         ":cuda_stream",
         ":cudnn_frontend_helpers",
+        "//third_party/eigen3",
         "//xla/stream_executor",
         "//xla/stream_executor:data_type",
         "//xla/stream_executor:dnn",
@@ -435,7 +436,6 @@ cuda_only_cc_library(
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:span",
         "@cudnn_frontend_archive//:cudnn_frontend",
-        "@eigen_archive//:eigen3",
         "@local_config_cuda//cuda:cuda_headers",
         "@local_config_cuda//cuda:cudnn_header",
         "@local_tsl//tsl/platform:errors",

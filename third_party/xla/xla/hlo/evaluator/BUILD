@@ -42,6 +42,7 @@ cc_library(
     ],
     hdrs = ["hlo_evaluator.h"],
     deps = [
+        "//third_party/eigen3",
         "//xla:array2d",
         "//xla:comparison_util",
         "//xla:literal",
@@ -79,7 +80,6 @@ cc_library(
         "@com_google_absl//absl/strings:cord",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/lib/core:bitmap",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:errors",

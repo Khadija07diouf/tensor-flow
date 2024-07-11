@@ -26,7 +26,7 @@ cc_library(
     copts = ["-fexceptions"],  # Required for pybind11.
     # Requires data dependency in order to load py module from C++.
     data = [
-        "@ml_dtypes",
+        "//third_party/py/ml_dtypes",
     ],
     features = [
         "-use_header_modules",  # Required for pybind11.
@@ -35,11 +35,11 @@ cc_library(
     deps = [
         ":numpy",
         "//third_party/py/numpy:headers",
+        "//third_party/pybind11",
         "@com_google_absl//absl/base",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/synchronization",
         "@local_config_python//:python_headers",  # build_cleaner: keep; DNR: b/35864863
-        "@pybind11",
     ],
 )
 

@@ -1,5 +1,5 @@
-load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library")
 load("@local_tsl//tsl/platform:rules_cc.bzl", "cc_library")
+load("//third_party/llvm/llvm-project/mlir:tblgen.bzl", "gentbl_cc_library")
 load("//xla/tsl:tsl.bzl", "internal_visibility")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable")
 
@@ -21,14 +21,14 @@ gentbl_cc_library(
             "passes.h.inc",
         ),
     ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    tblgen = "//third_party/llvm/llvm-project/mlir:mlir-tblgen",
     td_file = "passes.td",
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncTdFiles",
+        "//third_party/llvm/llvm-project/mlir:PassBaseTdFiles",
+        "//third_party/llvm/llvm-project/mlir:TensorOpsTdFiles",
         "//xla/mlir_hlo:hlo_ops_td_files",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncTdFiles",
-        "@llvm-project//mlir:PassBaseTdFiles",
-        "@llvm-project//mlir:TensorOpsTdFiles",
     ],
 )
 
@@ -43,16 +43,16 @@ cc_library(
     ],
     deps = [
         ":passes_inc_gen",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncToLLVM",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:LLVMCommonConversion",
+        "//third_party/llvm/llvm-project/mlir:LLVMDialect",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TransformUtils",
         "//xla/mlir/framework/ir:xla_framework",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:FuncToLLVM",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:LLVMCommonConversion",
-        "@llvm-project//mlir:LLVMDialect",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TransformUtils",
     ],
 )

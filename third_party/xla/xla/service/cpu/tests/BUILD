@@ -42,6 +42,8 @@ xla_cc_test(
     name = "cpu_aot_export_test",
     srcs = ["cpu_aot_export_test.cc"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:ARMCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:X86CodeGen",  # fixdeps: keep
         "//xla/hlo/ir:hlo",
         "//xla/hlo/ir:hlo_module_group",
         "//xla/service:compiler",
@@ -55,8 +57,6 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest",
-        "@llvm-project//llvm:ARMCodeGen",  # fixdeps: keep
-        "@llvm-project//llvm:X86CodeGen",  # fixdeps: keep
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -101,10 +101,10 @@ xla_cc_test(
     name = "cpu_bytesizeof_test",
     srcs = ["cpu_bytesizeof_test.cc"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/service/llvm_ir:llvm_util",
-        "@llvm-project//llvm:ir_headers",
         "@local_tsl//tsl/platform:test",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -129,6 +129,8 @@ xla_cc_test(
     srcs = ["cpu_noalias_test.cc"],
     deps = [
         ":cpu_codegen_test",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:literal",
         "//xla:literal_util",
         "//xla:shape_util",
@@ -142,8 +144,6 @@ xla_cc_test(
         "//xla/service/llvm_ir:llvm_util",
         "//xla/tests:filecheck",
         "@com_google_absl//absl/status",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
         "@local_tsl//tsl/platform:test_main",
@@ -155,6 +155,9 @@ xla_cc_test(
     srcs = ["cpu_intrinsic_test.cc"],
     deps = [
         ":cpu_codegen_test",
+        "//third_party/llvm/llvm-project/llvm:ARMCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:Target",
+        "//third_party/llvm/llvm-project/llvm:X86CodeGen",  # fixdeps: keep
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla:xla_proto_cc",
@@ -163,9 +166,6 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:ARMCodeGen",  # fixdeps: keep
-        "@llvm-project//llvm:Target",
-        "@llvm-project//llvm:X86CodeGen",  # fixdeps: keep
         "@local_tsl//tsl/platform:test",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -195,13 +195,13 @@ xla_cc_test(
     srcs = ["cpu_profiling_test.cc"],
     deps = [
         ":cpu_codegen_test",
+        "//third_party/llvm/llvm-project/llvm:ARMCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:Target",
+        "//third_party/llvm/llvm-project/llvm:X86CodeGen",  # fixdeps: keep
         "//xla/hlo/ir:hlo",
         "//xla/service/cpu:cpu_compiler",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:ARMCodeGen",  # fixdeps: keep
-        "@llvm-project//llvm:Target",
-        "@llvm-project//llvm:X86CodeGen",  # fixdeps: keep
         "@local_tsl//tsl/platform:test",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -324,6 +324,9 @@ xla_cc_test(
     srcs = ["cpu_vectorization_test.cc"],
     deps = [
         ":cpu_codegen_test",
+        "//third_party/llvm/llvm-project/llvm:ARMCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:Target",
+        "//third_party/llvm/llvm-project/llvm:X86CodeGen",  # fixdeps: keep
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla:xla_proto_cc",
@@ -333,9 +336,6 @@ xla_cc_test(
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:ARMCodeGen",  # fixdeps: keep
-        "@llvm-project//llvm:Target",
-        "@llvm-project//llvm:X86CodeGen",  # fixdeps: keep
         "@local_tsl//tsl/platform:test",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -346,11 +346,11 @@ xla_cc_test(
     srcs = ["cpu_while_test.cc"],
     deps = [
         ":cpu_codegen_test",
+        "//third_party/llvm/llvm-project/llvm:ARMCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:X86CodeGen",  # fixdeps: keep
         "//xla/service/cpu:cpu_compiler",
         "//xla/tests:literal_test_util",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:ARMCodeGen",  # fixdeps: keep
-        "@llvm-project//llvm:X86CodeGen",  # fixdeps: keep
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test_main",
     ],

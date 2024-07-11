@@ -1,4 +1,4 @@
-load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library", "td_library")
+load("//third_party/llvm/llvm-project/mlir:tblgen.bzl", "gentbl_cc_library", "td_library")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable")
 
 package(
@@ -16,9 +16,9 @@ td_library(
     compatible_with = get_compatible_with_portable(),
     visibility = ["//xla/python/ifrt:friends"],
     deps = [
-        "@llvm-project//mlir:AttrTdFiles",
-        "@llvm-project//mlir:BuiltinDialectTdFiles",
-        "@llvm-project//mlir:OpBaseTdFiles",
+        "//third_party/llvm/llvm-project/mlir:AttrTdFiles",
+        "//third_party/llvm/llvm-project/mlir:BuiltinDialectTdFiles",
+        "//third_party/llvm/llvm-project/mlir:OpBaseTdFiles",
     ],
 )
 
@@ -69,7 +69,7 @@ gentbl_cc_library(
             "ifrt_attrs.cc.inc",
         ),
     ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    tblgen = "//third_party/llvm/llvm-project/mlir:mlir-tblgen",
     td_file = "ifrt_dialect.td",
     test = True,
     deps = [":ifrt_td"],
@@ -88,7 +88,7 @@ gentbl_cc_library(
             "ifrt_ops.cc.inc",
         ),
     ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    tblgen = "//third_party/llvm/llvm-project/mlir:mlir-tblgen",
     td_file = "ifrt_ops.td",
     test = True,
     deps = [":ifrt_td"],
@@ -115,7 +115,7 @@ gentbl_cc_library(
             "ifrt_op_interfaces.cc.inc",
         ),
     ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    tblgen = "//third_party/llvm/llvm-project/mlir:mlir-tblgen",
     td_file = "ifrt_interfaces.td",
     test = True,
     deps = [":ifrt_td"],
@@ -141,14 +141,14 @@ cc_library(
         ":ifrt_interfaces_inc_gen",
         ":ifrt_ops_inc_gen",
         ":sharding_param",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:CallOpInterfaces",  # buildcleaner: keep
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla/python/ifrt",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:CallOpInterfaces",  # buildcleaner: keep
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
     ],
 )
 
@@ -159,12 +159,12 @@ cc_library(
     compatible_with = get_compatible_with_portable(),
     visibility = ["//xla/python/ifrt:friends"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:errors",
     ],
 )
@@ -176,10 +176,10 @@ cc_library(
     compatible_with = get_compatible_with_portable(),
     visibility = ["//xla/python/ifrt:friends"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/python/ifrt",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
     ],
 )

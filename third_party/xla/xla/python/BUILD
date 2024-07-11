@@ -1,4 +1,3 @@
-load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
 load("@local_config_rocm//rocm:build_defs.bzl", "if_rocm")
 load("@local_tsl//tsl/platform:build_config.bzl", "tf_proto_library")
@@ -7,6 +6,7 @@ load(
     "@local_tsl//tsl/platform/default:cuda_build_defs.bzl",
     "if_cuda_is_configured",
 )
+load("//third_party/bazel_skylib/rules:common_settings.bzl", "bool_flag")
 load("//xla:pytype.default.bzl", "pytype_strict_library")
 load("//xla:strict.default.bzl", "py_strict_library", "py_strict_test")
 load(
@@ -47,7 +47,7 @@ pytype_strict_library(
     deps = [
         ":xla_extension",  # buildcleaner: keep
     ] + if_google([
-        "@ml_dtypes",
+        "//third_party/py/ml_dtypes",
         "//third_party/py/numpy",
     ]),
 )
@@ -77,7 +77,7 @@ py_strict_test(
     deps = [
         ":xla_client",
         ":xla_extension",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ] + if_google([
         "//third_party/py/numpy",
         "//third_party/py/portpicker",
@@ -92,10 +92,10 @@ py_strict_library(
     visibility = [":friends"],
     deps = [
         ":xla_client",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
-        "@absl_py//absl/testing:parameterized",
+        "//third_party/py/absl/flags",
+        "//third_party/py/absl/logging",
+        "//third_party/py/absl/testing:absltest",
+        "//third_party/py/absl/testing:parameterized",
     ] + if_google(["//third_party/py/numpy"]),
 )
 
@@ -114,10 +114,10 @@ py_strict_test(
         ":custom_calls_testlib",
         ":xla_client",
         ":xla_extension",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
-        "@absl_py//absl/testing:parameterized",
+        "//third_party/py/absl/flags",
+        "//third_party/py/absl/logging",
+        "//third_party/py/absl/testing:absltest",
+        "//third_party/py/absl/testing:parameterized",
     ] + if_google(["//third_party/py/numpy"]) + xla_py_test_deps(),
 )
 
@@ -130,9 +130,9 @@ py_strict_test(
     deps = [
         ":xla_client",
         ":xla_extension",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/flags",
+        "//third_party/py/absl/logging",
+        "//third_party/py/absl/testing:absltest",
     ] + xla_py_test_deps(),
 )
 
@@ -150,10 +150,10 @@ py_strict_test(
     deps = [
         ":xla_client",
         ":xla_extension",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
-        "@absl_py//absl/testing:parameterized",
+        "//third_party/py/absl/flags",
+        "//third_party/py/absl/logging",
+        "//third_party/py/absl/testing:absltest",
+        "//third_party/py/absl/testing:parameterized",
     ] + if_google(
         [
             ":xla_gpu_extension",
@@ -186,7 +186,7 @@ py_strict_test(
     tags = ["no_oss"],
     deps = [
         ":status_casters_ext",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ] + xla_py_test_deps(),
 )
 
@@ -349,6 +349,8 @@ cc_library(
         ":util",
         ":xplane_to_profile_instructions",
         # placeholder for index annotation deps
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//third_party/nanobind",
         "//xla:comparison_util",
         "//xla:literal",
@@ -420,8 +422,6 @@ cc_library(
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:span",
         "@com_google_absl//absl/types:variant",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
         "@local_config_python//:python_headers",  # buildcleaner: keep
     ] + if_cuda([
         "@local_config_cuda//cuda:cuda_headers",
@@ -523,6 +523,8 @@ cc_library(
         ":traceback",
         ":types",
         ":util",
+        "//third_party/dlpack",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//third_party/nanobind",
         "//xla:shape_util",
         "//xla:status_macros",
@@ -538,8 +540,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@dlpack",
-        "@llvm-project//llvm:Support",
         "@local_config_python//:python_headers",  # buildcleaner: keep
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
@@ -851,6 +851,7 @@ cc_library(
         ":py_client",
         ":types",
         # placeholder for index annotation deps
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//third_party/nanobind",
         "//xla:literal",
         "//xla/client:executable_build_options",
@@ -864,7 +865,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/synchronization",
-        "@llvm-project//llvm:Support",
     ],
 )
 
@@ -877,9 +877,9 @@ py_strict_test(
     deps = [
         ":xla_client",
         ":xla_extension",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/flags",
+        "//third_party/py/absl/logging",
+        "//third_party/py/absl/testing:absltest",
     ] + xla_py_test_deps(),
 )
 
@@ -933,7 +933,20 @@ cc_library(
     deps = [
         ":refine_polymorphic_shapes",
         # placeholder for index annotation deps
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:BytecodeWriter",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncExtensions",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Parser",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:ReconcileUnrealizedCasts",
+        "//third_party/llvm/llvm-project/mlir:SparseTensorDialect",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//third_party/nanobind",
+        "//third_party/stablehlo:chlo_ops",
+        "//third_party/stablehlo:stablehlo_ops",
+        "//third_party/stablehlo:stablehlo_serialization",
         "//xla/client:xla_computation",
         "//xla/mlir/utils:error_util",
         "//xla/mlir_hlo",
@@ -947,19 +960,6 @@ cc_library(
         "@local_tsl//tsl/platform:statusor",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:BytecodeWriter",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:FuncExtensions",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Parser",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:ReconcileUnrealizedCasts",
-        "@llvm-project//mlir:SparseTensorDialect",
-        "@llvm-project//mlir:Support",
-        "@stablehlo//:chlo_ops",
-        "@stablehlo//:stablehlo_ops",
-        "@stablehlo//:stablehlo_serialization",
     ],
 )
 
@@ -968,24 +968,24 @@ cc_library(
     srcs = ["refine_polymorphic_shapes.cc"],
     hdrs = ["refine_polymorphic_shapes.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:BytecodeWriter",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncExtensions",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Parser",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:Transforms",
+        "//third_party/stablehlo:base",
+        "//third_party/stablehlo:chlo_ops",
+        "//third_party/stablehlo:stablehlo_ops",
         "//xla/mlir/utils:error_util",
         "//xla/mlir_hlo:stablehlo_extension_passes",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:BytecodeWriter",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:FuncExtensions",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Parser",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:Transforms",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
-        "@stablehlo//:base",
-        "@stablehlo//:chlo_ops",
-        "@stablehlo//:stablehlo_ops",
     ],
 )
 
@@ -1345,6 +1345,8 @@ tsl_pybind_extension(
         ":weakref_lru_cache",
         ":xla_compiler",
         # placeholder for index annotation deps
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//third_party/nanobind",
         "//xla:literal",
         "//xla:shape_util",
@@ -1394,8 +1396,6 @@ tsl_pybind_extension(
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
         "@local_config_python//:python_headers",  # buildcleaner: keep
     ] + select({
         # gloo transport only builds on linux
@@ -1595,10 +1595,10 @@ py_strict_test(
     deps = [
         ":xla_client",
         ":xla_extension",
+        "//third_party/py/absl/flags",
+        "//third_party/py/absl/logging",
+        "//third_party/py/absl/testing:absltest",
+        "//third_party/py/absl/testing:parameterized",
         "//third_party/py/numpy",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
-        "@absl_py//absl/testing:parameterized",
     ] + xla_py_test_deps(),
 )

@@ -13,7 +13,7 @@ cc_library(
     name = "constants",
     hdrs = ["constants.h"],
     compatible_with = get_compatible_with_portable() + get_compatible_with_libtpu_portable(),
-    deps = ["@llvm-project//llvm:Support"],
+    deps = ["//third_party/llvm/llvm-project/llvm:Support"],
 )
 
 cc_library(
@@ -23,11 +23,11 @@ cc_library(
     compatible_with = get_compatible_with_portable() + get_compatible_with_libtpu_portable(),
     deps = [
         ":constants",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncExtensions",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla/mlir_hlo",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:FuncExtensions",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
     ],
 )

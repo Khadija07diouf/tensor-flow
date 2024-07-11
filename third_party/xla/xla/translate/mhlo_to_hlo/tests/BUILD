@@ -44,9 +44,9 @@ lit_test_suite(
     cfg = "//xla:lit.cfg.py",
     data = [":test_utilities"],
     tools = [
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
+        "//third_party/llvm/llvm-project/llvm:not",
         "//xla/translate:xla-translate",
-        "@llvm-project//llvm:FileCheck",
-        "@llvm-project//llvm:not",
     ],
 )
 

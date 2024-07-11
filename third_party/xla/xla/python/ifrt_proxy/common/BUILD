@@ -98,6 +98,7 @@ cc_library(
     deps = [
         ":ifrt_service_proto_cc",
         ":types_proto_cc",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla/pjrt:pjrt_common",
         "//xla/python/ifrt",
         "//xla/python/ifrt:serdes",
@@ -107,7 +108,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:string_view",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
     ] + if_google(["@com_google_absl//absl/types:source_location"]),
 )

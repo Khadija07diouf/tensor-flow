@@ -1,4 +1,4 @@
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("//third_party/bazel_skylib/rules:build_test.bzl", "build_test")
 load("//xla:xla.bzl", "xla_cc_binary")
 
 package(
@@ -27,14 +27,14 @@ xla_cc_binary(
     srcs = ["mlir_interpreter_runner.cc"],
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:AllPassesAndDialects",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:ParseUtilities",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla/mlir/tools/mlir_interpreter/dialects",
         "//xla/mlir/tools/mlir_interpreter/framework",
         "//xla/mlir_hlo:hlo_dialect_registration",
         "//xla/mlir_hlo:mhlo_passes",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:AllPassesAndDialects",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:ParseUtilities",
-        "@llvm-project//mlir:Support",
     ],
 )

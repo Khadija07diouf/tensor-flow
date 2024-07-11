@@ -140,6 +140,8 @@ cc_library(
         ":abstract_tfrt_cpu_buffer",
         ":cpu_topology",
         ":tracked_tfrt_cpu_device_buffer",
+        "//third_party/eigen3",  # TODO(zhangqiaorjc): Remove if use TFRT threadpool.
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:array",
         "//xla:debug_options_flags",
         "//xla:executable_run_options",
@@ -206,8 +208,6 @@ cc_library(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",  # TODO(zhangqiaorjc): Remove if use TFRT threadpool.
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/lib/strings:proto_serialization",
         "@local_tsl//tsl/platform:casts",
         "@local_tsl//tsl/platform:denormal",

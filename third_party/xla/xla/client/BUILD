@@ -154,14 +154,14 @@ cc_library(
     deps = [
         ":client",
         ":xla_computation",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:TargetParser",
         "//xla:status_macros",
         "//xla:xla_data_proto_cc",
         "//xla/service:compile_only_service",
         "//xla/service:compiler",
         "//xla/stream_executor",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:TargetParser",
     ],
 )
 

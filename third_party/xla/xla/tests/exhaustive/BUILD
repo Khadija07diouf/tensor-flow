@@ -27,6 +27,7 @@ cc_library(
     hdrs = ["exhaustive_op_test_utils.h"],
     tags = ["no_pip"],
     deps = [
+        "//third_party/eigen3",
         "//xla:bit_cast",
         "//xla:executable_run_options",
         "//xla:literal",
@@ -47,7 +48,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -172,13 +172,13 @@ xla_test(
     ],
     deps = [
         ":exhaustive_op_test_utils",
+        "//third_party/eigen3",
         "//xla:literal",
         "//xla/client:xla_builder",
         "//xla/tests:xla_internal_test_main",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:test",
     ],
 )

@@ -1,7 +1,6 @@
 # Description:
 #   XLA service implementation.
 
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
 load(
     "@local_config_rocm//rocm:build_defs.bzl",
@@ -18,6 +17,7 @@ load(
     "@local_tsl//tsl/platform/default:cuda_build_defs.bzl",
     "if_cuda_is_configured",
 )
+load("//third_party/bazel_skylib/rules:build_test.bzl", "build_test")
 load("//xla:strict.default.bzl", "py_strict_library", "py_strict_test")
 load(
     "//xla:xla.bzl",
@@ -643,6 +643,10 @@ cc_library(
     deps = [
         ":hlo_graph_dumper",
         ":hlo_proto_util",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:Transforms",
         "//xla:util",
         "//xla:xla_proto_cc",
         "//xla/hlo/ir:hlo",
@@ -656,10 +660,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/synchronization",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:Transforms",
         "@local_tsl//tsl/lib/io:zlib_compression_options",
         "@local_tsl//tsl/lib/io:zlib_outputbuffer",
         "@local_tsl//tsl/lib/strings:proto_serialization",
@@ -1249,6 +1249,7 @@ cc_library(
         ":platform_util",
         ":stream_pool",
         ":transfer_manager",
+        "//third_party/eigen3",
         "//xla:util",
         "//xla/stream_executor",
         "//xla/stream_executor:device_memory_allocator",
@@ -1259,7 +1260,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:platform_port",
     ],
@@ -1711,8 +1711,8 @@ cc_library(
     local_defines = if_cuda_is_configured(["GOOGLE_CUDA=1"]),
     deps = [
         ":compiler",
+        "//third_party/llvm/llvm-project/llvm:Core",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Core",
         "@local_tsl//tsl/platform:denormal",
         "@local_tsl//tsl/profiler/lib:scoped_annotation",
     ],
@@ -5628,12 +5628,12 @@ cc_library(
         "float8_fnuz_ir_emitter.h",
     ],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Core",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:util",
         "//xla:xla_data_proto_cc",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Core",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -5645,6 +5645,9 @@ cc_library(
     deps = [
         ":algorithm_util",
         ":float8_fnuz_ir_emitter",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:TransformUtils",
         "//xla:permutation_util",
         "//xla:shape_util",
         "//xla:status_macros",
@@ -5666,9 +5669,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:TransformUtils",
         "@local_tsl//tsl/platform:logging",
     ],
 )
@@ -5689,6 +5689,7 @@ xla_test(
         ":elemental_ir_emitter",
         ":hlo_module_config",
         ":hlo_parser",
+        "//third_party/llvm/llvm-project/llvm:ir_headers",
         "//xla:error_spec",
         "//xla:execution_options_util",
         "//xla:literal",
@@ -5703,7 +5704,6 @@ xla_test(
         "//xla/tests:xla_internal_test_main",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:ir_headers",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -5979,6 +5979,7 @@ cc_library(
         ":hlo_parser",
         ":hlo_runner_interface",
         ":transfer_manager",
+        "//third_party/eigen3",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:types",
@@ -5990,7 +5991,6 @@ cc_library(
         "//xla/stream_executor:stream_executor_memory_allocator",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:statusor",
@@ -6757,6 +6757,7 @@ cc_library(
         ":hlo_proto_cc",
         ":name_uniquer",
         ":shape_inference",
+        "//third_party/eigen3",
         "//xla:comparison_util",
         "//xla:literal",
         "//xla:literal_util",
@@ -6777,7 +6778,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/lib/gtl:map_util",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
@@ -7486,7 +7486,7 @@ py_strict_test(
     ],
     deps = [
         ":generate_test_hlo_checks",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ] + xla_py_test_deps(),
 )
 

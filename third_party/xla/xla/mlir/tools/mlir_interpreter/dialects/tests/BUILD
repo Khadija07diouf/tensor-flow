@@ -7,7 +7,7 @@ lit_test_suite(
     srcs = glob(["**/*.mlir"]),
     cfg = "//xla:lit.cfg.py",
     tools = [
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
         "//xla/mlir/tools/mlir_interpreter:mlir-interpreter-runner",
-        "@llvm-project//llvm:FileCheck",
     ],
 )

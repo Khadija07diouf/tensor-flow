@@ -33,7 +33,7 @@ lit_test_suite(
     cfg = "//xla:lit.cfg.py",
     tools = [
         ":ifrt-opt",
-        "@llvm-project//llvm:FileCheck",
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
     ],
 )
 
@@ -41,13 +41,13 @@ xla_cc_binary(
     name = "ifrt-opt",
     srcs = ["ifrt-opt.cc"],
     deps = [
+        "//third_party/llvm/llvm-project/mlir:AllPassesAndDialects",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:MlirOptLib",
         "//xla/mlir_hlo:hlo_dialect_registration",
         "//xla/python/ifrt/ir",
         "//xla/python/ifrt/ir/transforms:built_in_spmd_expansions",
         "//xla/python/ifrt/ir/transforms:passes",
-        "@llvm-project//mlir:AllPassesAndDialects",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:MlirOptLib",
     ],
 )
 
@@ -58,6 +58,9 @@ cc_library(
     hdrs = ["executable_impl_test_base.h"],
     visibility = ["//xla/python/ifrt:friends"],
     deps = [
+        "//third_party/llvm/llvm-project/mlir:AllPassesAndDialects",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Parser",
         "//xla:status_macros",
         "//xla/mlir_hlo:hlo_dialect_registration",
         "//xla/python/ifrt",
@@ -69,9 +72,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//mlir:AllPassesAndDialects",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Parser",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
     ],
@@ -84,6 +84,8 @@ cc_library(
     visibility = ["//xla/python/ifrt:friends"],
     deps = [
         ":executable_impl_test_base",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/pjrt:pjrt_executable",
         "//xla/python/ifrt",
         "//xla/python/ifrt:test_util",
@@ -94,8 +96,6 @@ cc_library(
         "//xla/service:computation_placer_hdr",
         "//xla/tsl/concurrency:ref_count",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/lib/core:status_test_util",
         "@local_tsl//tsl/platform:status_matchers",
         "@local_tsl//tsl/platform:statusor",

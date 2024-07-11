@@ -10,8 +10,8 @@ lit_test_suite(
         "snapshot.mlir.pb",
     ],
     tools = [
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
+        "//third_party/llvm/llvm-project/llvm:not",
         "//xla/mlir/tools/mlir_bisect:mlir-bisect",
-        "@llvm-project//llvm:FileCheck",
-        "@llvm-project//llvm:not",
     ],
 )

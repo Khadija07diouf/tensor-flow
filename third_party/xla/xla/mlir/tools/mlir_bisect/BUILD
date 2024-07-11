@@ -1,5 +1,5 @@
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@local_tsl//tsl/platform:rules_cc.bzl", "cc_library")
+load("//third_party/bazel_skylib/rules:build_test.bzl", "build_test")
 load("//xla:xla.bzl", "xla_cc_binary")
 
 # copybara:uncomment package(default_applicable_licenses = ["//tensorflow:license"])
@@ -18,6 +18,15 @@ xla_cc_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":bisect_lib",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:AffineUtils",
+        "//third_party/llvm/llvm-project/mlir:AllPassesAndDialects",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Parser",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:Transforms",
         "//xla:literal",
         "//xla/mlir/tools/mlir_bisect/rewrites",
         "//xla/mlir/tools/mlir_interpreter/dialects",
@@ -27,15 +36,6 @@ xla_cc_binary(
         "//xla/mlir_hlo:mhlo_passes",
         "//xla/service:hlo_proto_cc",
         "@com_google_absl//absl/log:check",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:AffineUtils",
-        "@llvm-project//mlir:AllPassesAndDialects",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Parser",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:Transforms",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:platform_port",
     ],
@@ -53,13 +53,13 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:LinalgDialect",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla/mlir/tools/mlir_replay/public:execution_trace_proto_cc",
         "//xla/mlir/tools/mlir_replay/public:execution_trace_proto_cc_impl",
         "//xla/mlir/tools/mlir_replay/public:execution_trace_utils",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:LinalgDialect",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:Support",
     ],
 )

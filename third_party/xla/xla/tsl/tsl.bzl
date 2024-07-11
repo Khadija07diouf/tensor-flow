@@ -1,6 +1,6 @@
 """Provides build configuration for TSL"""
 
-load("@bazel_skylib//lib:new_sets.bzl", "sets")
+load("//third_party/bazel_skylib/lib:new_sets.bzl", "sets")
 load(
     "@local_config_cuda//cuda:build_defs.bzl",
     "if_cuda",

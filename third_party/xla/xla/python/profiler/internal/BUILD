@@ -21,6 +21,7 @@ cc_library(
         "//tensorflow/python/profiler/internal:__subpackages__",
     ]),
     deps = [
+        "//third_party/pybind11",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/memory",
@@ -34,7 +35,6 @@ cc_library(
         "@local_tsl//tsl/profiler/utils:xplane_builder",
         "@local_tsl//tsl/profiler/utils:xplane_schema",
         "@local_tsl//tsl/profiler/utils:xplane_utils",
-        "@pybind11",
     ],
     alwayslink = True,
 )
@@ -48,10 +48,10 @@ cc_library(
         "//tensorflow/python/profiler/internal:__pkg__",
     ]),
     deps = [
+        "//third_party/pybind11",
         "@com_google_absl//absl/strings",
         "@local_tsl//tsl/platform:macros",
         "@local_tsl//tsl/platform:types",
         "@local_tsl//tsl/profiler/lib:traceme_for_pybind",
-        "@pybind11",
     ],
 )

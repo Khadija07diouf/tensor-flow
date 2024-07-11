@@ -477,6 +477,9 @@ xla_test(
     ],
     deps = [
         ":gpu_codegen_test",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:shape_util",
         "//xla/hlo/ir:hlo",
         "//xla/stream_executor:device_description",
@@ -485,9 +488,6 @@ xla_test(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings:string_view",
         "@com_google_googletest//:gtest_main",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:status_matchers",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -755,6 +755,7 @@ xla_test(
     ]),
     deps = [
         ":gpu_codegen_test",
+        "//third_party/eigen3",
         "//xla:error_spec",
         "//xla:literal",
         "//xla:literal_util",
@@ -763,7 +764,6 @@ xla_test(
         "//xla:xla_data_proto_cc",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/strings",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test_main",
     ],
@@ -834,8 +834,8 @@ lit_test_suite(
         "reduction_vectorization_sm_all.hlo": ["no_rocm"],
     },
     tools = [
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
         "//xla/tools:hlo-opt",
-        "@llvm-project//llvm:FileCheck",
     ],
 )
 
@@ -846,7 +846,7 @@ lit_test_suite(
 #     cfg = "//xla:lit.cfg.py",
 #     tools = [
 #         ":xla-opt",
-#         "@llvm-project//llvm:FileCheck",
+#         "//third_party/llvm/llvm-project/llvm:FileCheck",
 #         "@triton//:triton-opt",
 #     ],
 # )
@@ -855,10 +855,10 @@ lit_test_suite(
 #     name = "xla-opt",
 #     srcs = ["xla-opt.cc"],
 #     deps = [
+#         "//third_party/llvm/llvm-project/mlir:AllExtensions",
+#         "//third_party/llvm/llvm-project/mlir:MlirOptLib",
 #         "//xla/service/gpu:prevent_mmav3_loop_unrolling",
 #         "//xla/service/gpu:triton_sparse_extensions",
-#         "@llvm-project//mlir:AllExtensions",
-#         "@llvm-project//mlir:MlirOptLib",
 #         "@triton//:AllPassesAndDialects",
 #     ],
 # )

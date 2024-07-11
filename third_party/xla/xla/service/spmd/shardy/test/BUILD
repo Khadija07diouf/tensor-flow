@@ -12,7 +12,7 @@ lit_test_suite(
     srcs = glob(["*.mlir"]),
     cfg = "//xla:lit.cfg.py",
     tools = [
+        "//third_party/llvm/llvm-project/llvm:FileCheck",
         "//xla/service/spmd/shardy:xla_sdy_opt",
-        "@llvm-project//llvm:FileCheck",
     ],
 )

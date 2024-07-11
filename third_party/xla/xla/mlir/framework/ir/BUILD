@@ -1,5 +1,5 @@
-load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library", "td_library")
 load("@local_tsl//tsl/platform:rules_cc.bzl", "cc_library")
+load("//third_party/llvm/llvm-project/mlir:tblgen.bzl", "gentbl_cc_library", "td_library")
 load("//xla/tsl:tsl.bzl", "internal_visibility")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable")
 
@@ -16,9 +16,9 @@ td_library(
     ],
     compatible_with = get_compatible_with_portable(),
     deps = [
-        "@llvm-project//mlir:ControlFlowInterfacesTdFiles",
-        "@llvm-project//mlir:OpBaseTdFiles",
-        "@llvm-project//mlir:SideEffectInterfacesTdFiles",
+        "//third_party/llvm/llvm-project/mlir:ControlFlowInterfacesTdFiles",
+        "//third_party/llvm/llvm-project/mlir:OpBaseTdFiles",
+        "//third_party/llvm/llvm-project/mlir:SideEffectInterfacesTdFiles",
     ],
 )
 
@@ -51,7 +51,7 @@ gentbl_cc_library(
             "xla_framework_types.cc.inc",
         ),
     ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    tblgen = "//third_party/llvm/llvm-project/mlir:mlir-tblgen",
     td_file = "xla_framework_ops.td",
     deps = [":td_files"],
 )
@@ -66,10 +66,10 @@ cc_library(
     hdrs = ["xla_framework.h"],
     deps = [
         ":xla_framework_inc_gen",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:DialectUtils",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:MemRefDialect",
-        "@llvm-project//mlir:Support",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:DialectUtils",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:MemRefDialect",
+        "//third_party/llvm/llvm-project/mlir:Support",
     ],
 )

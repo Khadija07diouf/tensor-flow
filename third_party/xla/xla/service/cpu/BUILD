@@ -1,7 +1,6 @@
 # Description:
 #    LLVM-based CPU backend for XLA.
 
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@local_tsl//tsl/platform:build_config.bzl", "tf_proto_library")
 load(
     "@local_tsl//tsl/platform:build_config_root.bzl",
@@ -11,6 +10,7 @@ load(
     "if_llvm_x86_available",
 )
 load("@local_tsl//tsl/platform:rules_cc.bzl", "cc_library")
+load("//third_party/bazel_skylib/rules:build_test.bzl", "build_test")
 load(
     "//third_party/compute_library:build_defs.bzl",
     "acl_deps",
@@ -63,7 +63,7 @@ cc_library(
     name = "runtime_mlir_utils",
     visibility = ["//visibility:public"],
     deps = [
-        "@llvm-project//mlir:mlir_c_runner_utils",
+        "//third_party/llvm/llvm-project/mlir:mlir_c_runner_utils",
     ],
 )
 
@@ -230,6 +230,35 @@ cc_library(
         ":target_machine_features",
         ":thunk_emitter",
         ":xla_framework",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:MC",
+        "//third_party/llvm/llvm-project/llvm:Object",
+        "//third_party/llvm/llvm-project/llvm:OrcJIT",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:Target",
+        "//third_party/llvm/llvm-project/llvm:TargetParser",
+        "//third_party/llvm/llvm-project/mlir:AffineDialect",
+        "//third_party/llvm/llvm-project/mlir:AffineToStandard",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:ArithTransforms",
+        "//third_party/llvm/llvm-project/mlir:BufferizationTransforms",
+        "//third_party/llvm/llvm-project/mlir:BuiltinToLLVMIRTranslation",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:LLVMDialect",
+        "//third_party/llvm/llvm-project/mlir:LLVMToLLVMIRTranslation",
+        "//third_party/llvm/llvm-project/mlir:LinalgDialect",
+        "//third_party/llvm/llvm-project/mlir:LinalgTransforms",
+        "//third_party/llvm/llvm-project/mlir:MemRefTransforms",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:ReconcileUnrealizedCasts",
+        "//third_party/llvm/llvm-project/mlir:SCFDialect",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
+        "//third_party/llvm/llvm-project/mlir:ToLLVMIRTranslation",
+        "//third_party/llvm/llvm-project/mlir:TransformUtils",
+        "//third_party/llvm/llvm-project/mlir:Transforms",
+        "//third_party/llvm/llvm-project/mlir:VectorDialect",
         "//xla:cpu_function_runtime",
         "//xla:debug_options_flags",
         "//xla:literal",
@@ -348,35 +377,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:MC",
-        "@llvm-project//llvm:Object",
-        "@llvm-project//llvm:OrcJIT",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:Target",
-        "@llvm-project//llvm:TargetParser",
-        "@llvm-project//mlir:AffineDialect",
-        "@llvm-project//mlir:AffineToStandard",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:ArithTransforms",
-        "@llvm-project//mlir:BufferizationTransforms",
-        "@llvm-project//mlir:BuiltinToLLVMIRTranslation",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:LLVMDialect",
-        "@llvm-project//mlir:LLVMToLLVMIRTranslation",
-        "@llvm-project//mlir:LinalgDialect",
-        "@llvm-project//mlir:LinalgTransforms",
-        "@llvm-project//mlir:MemRefTransforms",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:ReconcileUnrealizedCasts",
-        "@llvm-project//mlir:SCFDialect",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TensorDialect",
-        "@llvm-project//mlir:ToLLVMIRTranslation",
-        "@llvm-project//mlir:TransformUtils",
-        "@llvm-project//mlir:Transforms",
-        "@llvm-project//mlir:VectorDialect",
         "@local_tsl//tsl/platform:casts",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
@@ -385,13 +385,13 @@ cc_library(
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/protobuf:error_codes_proto_impl_cc",
     ] + if_llvm_aarch64_available([
-        "@llvm-project//llvm:AArch64CodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:AArch64CodeGen",  # fixdeps: keep
     ]) + if_llvm_powerpc_available([
-        "@llvm-project//llvm:PowerPCCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:PowerPCCodeGen",  # fixdeps: keep
     ]) + if_llvm_system_z_available([
-        "@llvm-project//llvm:SystemZCodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:SystemZCodeGen",  # fixdeps: keep
     ]) + if_llvm_x86_available([
-        "@llvm-project//llvm:X86CodeGen",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:X86CodeGen",  # fixdeps: keep
     ]),
 )
 
@@ -407,6 +407,7 @@ cc_library(
         ":executable_proto_cc",
         ":target_machine_features",
         ":xla_framework",
+        "//third_party/llvm/llvm-project/llvm:Target",
         "//xla:cpu_function_runtime",
         "//xla:util",
         "//xla/hlo/ir:hlo",
@@ -422,7 +423,6 @@ cc_library(
         "//xla/stream_executor/host:host_platform_id",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Target",
     ],
     alwayslink = True,  # Contains compiler registration
 )
@@ -485,20 +485,20 @@ cc_library(
         ":runtime_single_threaded_fft",
         ":runtime_single_threaded_matmul",
         ":runtime_topk",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:ExecutionEngine",
+        "//third_party/llvm/llvm-project/llvm:MC",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:OrcJIT",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:Target",  # fixdeps: keep
+        "//third_party/llvm/llvm-project/llvm:TargetParser",
+        "//third_party/llvm/llvm-project/mlir:mlir_c_runner_utils",
         "//xla:types",
         "//xla:util",
         "//xla/service:custom_call_target_registry",
         "@com_google_absl//absl/functional:any_invocable",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:ExecutionEngine",
-        "@llvm-project//llvm:MC",  # fixdeps: keep
-        "@llvm-project//llvm:OrcJIT",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:Target",  # fixdeps: keep
-        "@llvm-project//llvm:TargetParser",
-        "@llvm-project//mlir:mlir_c_runner_utils",
         "@local_tsl//tsl/platform:logging",
     ] + xla_internal(["service/cpu:named_orc_jit_memory_mapper"]),
 )
@@ -548,6 +548,13 @@ cc_library(
         ":cpu_runtime",
         ":simple_orc_jit",
         ":xla_framework",
+        "//third_party/eigen3",
+        "//third_party/llvm/llvm-project/llvm:ExecutionEngine",
+        "//third_party/llvm/llvm-project/llvm:OrcJIT",
+        "//third_party/llvm/llvm-project/llvm:OrcShared",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:Parser",
         "//xla:executable_run_options",
         "//xla:literal",
         "//xla:shape_tree",
@@ -586,13 +593,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@eigen_archive//:eigen3",
-        "@llvm-project//llvm:ExecutionEngine",
-        "@llvm-project//llvm:OrcJIT",
-        "@llvm-project//llvm:OrcShared",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:Parser",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:statusor",
@@ -604,6 +604,8 @@ cc_library(
     srcs = ["elemental_math_emitter.cc"],
     hdrs = ["elemental_math_emitter.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/service/llvm_ir:ir_array",
@@ -612,8 +614,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:logging",
     ],
 )
@@ -628,6 +628,8 @@ cc_library(
         ":ir_emitter",
         ":parallel_loop_emitter",
         ":shape_partition",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:cpu_function_runtime",
         "//xla:shape_util",
         "//xla:util",
@@ -653,8 +655,6 @@ cc_library(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/strings:string_view",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:statusor",
@@ -668,6 +668,9 @@ xla_cc_test(
         ":ir_emitter",
         ":ir_emitter2",
         ":target_machine_features_fake",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:OrcJIT",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
@@ -683,9 +686,6 @@ xla_cc_test(
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:OrcJIT",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
         "@local_tsl//tsl/platform:test_main",
@@ -709,6 +709,9 @@ cc_library(
         ":onednn_memory_util",
         ":parallel_loop_emitter",
         ":target_machine_features",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:TargetParser",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:literal",
         "//xla:literal_util",
         "//xla:shape_util",
@@ -744,9 +747,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:TargetParser",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/lib/math:math_util",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
@@ -761,11 +761,11 @@ cc_library(
     ],
     hdrs = ["target_machine_features.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Analysis",
+        "//third_party/llvm/llvm-project/llvm:Target",
         "//xla:cpu_function_runtime",
         "//xla:shape_util",
         "@com_google_absl//absl/container:flat_hash_map",
-        "@llvm-project//llvm:Analysis",
-        "@llvm-project//llvm:Target",
         "@local_tsl//tsl/platform:logging",
     ],
 )
@@ -787,6 +787,7 @@ cc_library(
         ":cpu_runtime",
         ":ir_emission_utils",
         ":shape_partition",
+        "//third_party/llvm/llvm-project/llvm:Core",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:types",
@@ -795,7 +796,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
     ],
 )
 
@@ -805,12 +805,12 @@ cc_library(
     hdrs = ["parallel_loop_emitter.h"],
     deps = [
         ":ir_emission_utils",
+        "//third_party/llvm/llvm-project/llvm:Core",
         "//xla/service/llvm_ir:ir_array",
         "//xla/service/llvm_ir:llvm_loop",
         "//xla/service/llvm_ir:llvm_util",
         "//xla/service/llvm_ir:loop_emitter",
         "@com_google_absl//absl/strings:str_format",
-        "@llvm-project//llvm:Core",
     ],
 )
 
@@ -871,12 +871,12 @@ cc_library(
     hdrs = ["tiled_dot_emitter.h"],
     deps = [
         ":vector_support_library",
+        "//third_party/llvm/llvm-project/llvm:Core",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
         "//xla/service:hlo_module_config",
         "//xla/service/llvm_ir:kernel_support_library",
         "//xla/service/llvm_ir:llvm_util",
-        "@llvm-project//llvm:Core",
     ],
 )
 
@@ -894,6 +894,8 @@ cc_library(
         ":target_machine_features",
         ":tiled_dot_emitter",
         ":vector_support_library",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:shape_util",
         "//xla:status_macros",
         "//xla:types",
@@ -909,8 +911,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:status",
@@ -952,21 +952,21 @@ cc_library(
     deps = [
         ":cpu_runtime",
         ":llvm_ir_runtime",
+        "//third_party/llvm/llvm-project/llvm:Analysis",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Instrumentation",
+        "//third_party/llvm/llvm-project/llvm:MC",
+        "//third_party/llvm/llvm-project/llvm:Object",
+        "//third_party/llvm/llvm-project/llvm:OrcJIT",
+        "//third_party/llvm/llvm-project/llvm:Passes",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:Target",
         "//xla:types",
         "//xla:util",
         "//xla/service:llvm_compiler",
         "//xla/service/llvm_ir:llvm_util",
         "@com_google_absl//absl/functional:any_invocable",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Analysis",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Instrumentation",
-        "@llvm-project//llvm:MC",
-        "@llvm-project//llvm:Object",
-        "@llvm-project//llvm:OrcJIT",
-        "@llvm-project//llvm:Passes",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:Target",
         "@local_tsl//tsl/platform:logging",
     ],
 )
@@ -1023,10 +1023,10 @@ cc_library(
     ],
     deps = [
         ":vector_support_library",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:TransformUtils",
         "//xla/service/llvm_ir:llvm_util",
         "//xla/service/llvm_ir:math_ops",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:TransformUtils",
         "@local_tsl//tsl/platform:logging",
     ],
 )
@@ -1039,12 +1039,12 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla/service/cpu/runtime:conv_impl",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel",
         "//xla/tsl/framework/convolution:eigen_helpers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:mutex",  # build_cleaner: keep
     ],
 )
@@ -1057,12 +1057,12 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla/service/cpu/runtime:conv_impl",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel",
         "//xla/tsl/framework/convolution:eigen_helpers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:mutex",  # build_cleaner: keep
     ],
 )
@@ -1090,11 +1090,11 @@ cc_library(
     deps = [
         ":runtime_conv2d",
         ":runtime_single_threaded_conv2d",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla/tsl/framework/convolution:eigen_helpers",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
     ] + mkl_deps(),
 )
 
@@ -1107,10 +1107,10 @@ cc_library(
     copts = runtime_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/ducc:fft_wrapper",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "@com_google_absl//absl/base:core_headers",
-        "@ducc//:fft_wrapper",
-        "@eigen_archive//:eigen3",
     ],
 )
 
@@ -1130,11 +1130,11 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:mutex",  # build_cleaner: keep
     ],
 )
@@ -1148,9 +1148,9 @@ cc_library(
     deps = [
         ":runtime_lightweight_check",
         ":runtime_matmul",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "@com_google_absl//absl/base",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:dynamic_annotations",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:types",
@@ -1169,10 +1169,10 @@ cc_library(
         ":runtime_conv2d",
         ":runtime_lightweight_check",
         ":runtime_single_threaded_conv2d",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla/tsl/framework/convolution:eigen_helpers",
         "@com_google_absl//absl/base",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:dynamic_annotations",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:types",
@@ -1186,11 +1186,11 @@ cc_library(
     copts = runtime_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/eigen3",
         "//xla/service/cpu/runtime:conv_impl",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel",
         "//xla/tsl/framework/convolution:eigen_helpers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:mutex",  # build_cleaner: keep
     ],
 )
@@ -1202,11 +1202,11 @@ cc_library(
     copts = runtime_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/eigen3",
         "//xla/service/cpu/runtime:conv_impl",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel",
         "//xla/tsl/framework/convolution:eigen_helpers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:mutex",  # build_cleaner: keep
     ],
 )
@@ -1243,9 +1243,9 @@ cc_library(
     linkstatic = 1,
     visibility = ["//visibility:private"],
     deps = [
+        "//third_party/eigen3",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel_no_mkl",
         "@com_google_absl//absl/base:core_headers",
-        "@eigen_archive//:eigen3",
     ],
 )
 
@@ -1257,7 +1257,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":runtime_single_threaded_matmul_impl",
-        "@eigen_archive//:eigen3",
+        "//third_party/eigen3",
     ],
 )
 
@@ -1268,9 +1268,9 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":runtime_single_threaded_matmul_impl",
+        "//third_party/eigen3",
         "//xla/tsl/framework/contraction:eigen_contraction_kernel_no_mkl",
         "@com_google_absl//absl/base:core_headers",
-        "@eigen_archive//:eigen3",
     ],
 )
 
@@ -1281,8 +1281,8 @@ cc_library(
     copts = runtime_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/eigen3",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
     ],
 )
 
@@ -1305,12 +1305,12 @@ cc_library(
     copts = runtime_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla/service:custom_call_status_internal",
         "@com_google_absl//absl/base:dynamic_annotations",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:logging",
     ],
@@ -1323,6 +1323,9 @@ cc_library(
     copts = runtime_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/llvm/llvm-project/mlir:AsmParser",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:executable_run_options",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
@@ -1336,9 +1339,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//mlir:AsmParser",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:statusor",
     ],
@@ -1355,13 +1355,13 @@ xla_cc_test(
         ":runtime_matmul",
         ":runtime_matmul_acl",
         ":runtime_single_threaded_matmul",
+        "//third_party/eigen3",
         "//xla:array2d",
         "//xla:types",
         "//xla/client:local_client",
         "//xla/service:custom_call_status_internal",
         "//xla/tests:xla_internal_test_main",
         "@com_google_absl//absl/strings:str_format",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:logging",
         "@local_tsl//tsl/platform:test",
@@ -1420,10 +1420,10 @@ cc_library(
     deps = [
         ":cpu_runtime",
         ":target_machine_features",
+        "//third_party/llvm/llvm-project/llvm:Core",
         "//xla:shape_util",
         "//xla:window_util",
         "//xla/hlo/ir:hlo",
-        "@llvm-project//llvm:Core",
     ],
 )
 
@@ -1600,9 +1600,9 @@ cc_library(
     srcs = ["orc_jit_memory_mapper.cc"],
     hdrs = ["orc_jit_memory_mapper.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:ExecutionEngine",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/synchronization",
-        "@llvm-project//llvm:ExecutionEngine",
         "@local_tsl//tsl/platform:logging",
     ],
 )
@@ -1613,14 +1613,14 @@ cc_library(
     hdrs = ["vector_support_library.h"],
     deps = [
         ":target_machine_features",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:Support",
         "//xla:shape_util",
         "//xla:types",
         "//xla:xla_data_proto_cc",
         "//xla/service/llvm_ir:llvm_util",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:Support",
     ],
 )
 
@@ -1646,12 +1646,12 @@ xla_cc_test(
         ":cpu_compiler",
         ":cpu_transfer_manager",
         ":test_header_helper",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:MC",
+        "//third_party/llvm/llvm-project/llvm:Target",
         "//xla:test",
         "//xla/tests:hlo_test_base",
         "//xla/tests:xla_internal_test_main",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:MC",
-        "@llvm-project//llvm:Target",
     ],
 )
 
@@ -1680,9 +1680,9 @@ cc_library(
     copts = runtime_copts() + tsl_copts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//third_party/eigen3",
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:platform_port",
@@ -1697,6 +1697,9 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":runtime_lightweight_check",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:TargetParser",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:literal",
         "//xla:shape_util",
         "//xla:status_macros",
@@ -1711,9 +1714,6 @@ cc_library(
         "@com_google_absl//absl/base:dynamic_annotations",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:TargetParser",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:errors",
         "@local_tsl//tsl/platform:logging",
     ] + mkl_deps(),
@@ -1731,12 +1731,12 @@ cc_library(
         ":onednn_memory_util",
         ":onednn_util",
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla:shape_util",
         "//xla/hlo/ir:hlo",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:logging",
@@ -1756,11 +1756,11 @@ cc_library(
         ":onednn_memory_util",
         ":onednn_util",
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla:shape_util",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:logging",
@@ -1782,10 +1782,10 @@ cc_library(
         ":onednn_config_proto_cc",
         ":onednn_memory_util",
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:platform_port",
@@ -1806,10 +1806,10 @@ cc_library(
         ":onednn_config_proto_cc",
         ":onednn_memory_util",
         ":runtime_lightweight_check",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/base:dynamic_annotations",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:platform_port",
@@ -1841,6 +1841,7 @@ cc_library(
         ":onednn_memory_util",
         ":onednn_pattern_utils",
         ":onednn_util",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla:shape_util",
         "//xla:status_macros",
@@ -1852,7 +1853,6 @@ cc_library(
         "//xla/service:hlo_pass",
         "//xla/service:pattern_matcher",
         "@com_google_absl//absl/algorithm:container",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:logging",
@@ -1895,6 +1895,7 @@ cc_library(
         ":onednn_convolution",
         ":onednn_memory_util",
         ":onednn_util",
+        "//third_party/eigen3",
         "//xla:executable_run_options",
         "//xla:shape_util",
         "//xla:status_macros",
@@ -1906,7 +1907,6 @@ cc_library(
         "//xla/service:pattern_matcher",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/status:statusor",
-        "@eigen_archive//:eigen3",
         "@local_tsl//tsl/platform:blocking_counter",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:logging",

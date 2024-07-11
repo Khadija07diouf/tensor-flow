@@ -1,6 +1,6 @@
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library")
 load("@local_tsl//tsl/platform:rules_cc.bzl", "cc_binary", "cc_library")
+load("//third_party/bazel_skylib/rules:build_test.bzl", "build_test")
+load("//third_party/llvm/llvm-project/mlir:tblgen.bzl", "gentbl_cc_library")
 load("//xla:xla.bzl", "xla_cc_test")
 load("//xla/tsl:tsl.bzl", "internal_visibility")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable")
@@ -19,6 +19,8 @@ cc_library(
     srcs = ["attribute_exporter.cc"],
     hdrs = ["attribute_exporter.h"],
     deps = [
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:shape_util",
         "//xla:types",
         "//xla:util",
@@ -28,8 +30,6 @@ cc_library(
         "//xla/service:hlo_proto_cc",
         "//xla/stream_executor:dnn",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
     ],
 )
 
@@ -53,11 +53,11 @@ cc_library(
     hdrs = ["location_exporter.h"],
     deps = [
         ":stack_frame_index_builder",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla:xla_data_proto_cc",
         "@com_google_absl//absl/log",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
     ],
 )
 
@@ -66,8 +66,8 @@ cc_library(
     srcs = ["module_config_exporter.cc"],
     hdrs = ["module_config_exporter.h"],
     deps = [
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/service:hlo_module_config",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -76,8 +76,8 @@ cc_library(
     srcs = ["stack_frame_index_builder.cc"],
     hdrs = ["stack_frame_index_builder.h"],
     deps = [
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla/service:hlo_proto_cc",
-        "@llvm-project//mlir:IR",
     ],
 )
 
@@ -96,6 +96,17 @@ cc_library(
         ":operator_writer_inc",
         ":stack_frame_index_builder",
         ":type_to_shape",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:MemRefDialect",
+        "//third_party/llvm/llvm-project/mlir:Pass",
+        "//third_party/llvm/llvm-project/mlir:ShapeDialect",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
+        "//third_party/llvm/llvm-project/mlir:TransformUtils",
+        "//third_party/stablehlo:stablehlo_ops",
         "//xla:array",
         "//xla:comparison_util",
         "//xla:literal",
@@ -122,19 +133,8 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:span",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:MemRefDialect",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:ShapeDialect",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TensorDialect",
-        "@llvm-project//mlir:TransformUtils",
         "@local_tsl//tsl/platform:ml_dtypes",
         "@local_tsl//tsl/platform:statusor",
-        "@stablehlo//:stablehlo_ops",
     ],
 )
 
@@ -149,9 +149,9 @@ cc_binary(
     name = "operator_writer_gen",
     srcs = ["operator_writer_gen.cc"],
     deps = [
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:TableGen",
-        "@llvm-project//mlir:TableGen",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:TableGen",
+        "//third_party/llvm/llvm-project/mlir:TableGen",
     ],
 )
 
@@ -162,10 +162,10 @@ gentbl_cc_library(
     tblgen = ":operator_writer_gen",
     td_file = "//xla/mlir_hlo:mhlo/IR/hlo_ops.td",
     deps = [
+        "//third_party/llvm/llvm-project/mlir:InferTypeOpInterfaceTdFiles",
+        "//third_party/llvm/llvm-project/mlir:OpBaseTdFiles",
+        "//third_party/llvm/llvm-project/mlir:SideEffectInterfacesTdFiles",
         "//xla/mlir_hlo:hlo_ops_td_files",
-        "@llvm-project//mlir:InferTypeOpInterfaceTdFiles",
-        "@llvm-project//mlir:OpBaseTdFiles",
-        "@llvm-project//mlir:SideEffectInterfacesTdFiles",
     ],
 )
 
@@ -176,6 +176,11 @@ cc_library(
     deps = [
         ":mlir_hlo_to_hlo",
         ":type_to_shape",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Parser",
+        "//third_party/llvm/llvm-project/mlir:Support",
         "//xla/hlo/ir:hlo",
         "//xla/mlir_hlo:hlo_dialect_registration",
         "//xla/service:hlo_module_config",
@@ -183,11 +188,6 @@ cc_library(
         "//xla/service:hlo_proto_util",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/status:statusor",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Parser",
-        "@llvm-project//mlir:Support",
     ],
 )
 
@@ -200,14 +200,14 @@ cc_library(
     ],
     deps = [
         ":translate",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:ArithDialect",
+        "//third_party/llvm/llvm-project/mlir:FuncDialect",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/llvm/llvm-project/mlir:TensorDialect",
+        "//third_party/llvm/llvm-project/mlir:TranslateLib",
         "//xla/mlir_hlo:hlo_dialect_registration",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:ArithDialect",
-        "@llvm-project//mlir:FuncDialect",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Support",
-        "@llvm-project//mlir:TensorDialect",
-        "@llvm-project//mlir:TranslateLib",
     ],
     alwayslink = 1,
 )
@@ -217,16 +217,16 @@ cc_library(
     srcs = ["type_to_shape.cc"],
     hdrs = ["type_to_shape.h"],
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/mlir:IR",
+        "//third_party/llvm/llvm-project/mlir:SparseTensorDialect",
+        "//third_party/llvm/llvm-project/mlir:SparseTensorEnums",
+        "//third_party/llvm/llvm-project/mlir:Support",
+        "//third_party/stablehlo:stablehlo_ops",
         "//xla:shape_util",
         "//xla:xla_data_proto_cc",
         "//xla/mlir/utils:type_util",
         "//xla/mlir_hlo",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:SparseTensorDialect",
-        "@llvm-project//mlir:SparseTensorEnums",
-        "@llvm-project//mlir:Support",
-        "@stablehlo//:stablehlo_ops",
     ],
 )
 
@@ -235,11 +235,11 @@ xla_cc_test(
     srcs = ["type_to_shape_test.cc"],
     deps = [
         ":type_to_shape",
+        "//third_party/llvm/llvm-project/mlir:IR",
         "//xla:shape_util",
         "//xla:test",
         "//xla:xla_data_proto_cc",
         "//xla/translate/hlo_to_mhlo:hlo_utils",
-        "@llvm-project//mlir:IR",
         "@local_tsl//tsl/platform:protobuf",
         "@local_tsl//tsl/platform:test_main",
     ],

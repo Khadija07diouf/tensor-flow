@@ -44,7 +44,7 @@ py_test(
     deps = [
         ":configure",
         "//build_tools:test_utils",
-        "@absl_py//absl/testing:absltest",
+        "//third_party/py/absl/testing:absltest",
     ],
 )
 

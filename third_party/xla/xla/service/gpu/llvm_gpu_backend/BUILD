@@ -36,6 +36,22 @@ cc_library(
         "GOOGLE_CUDA=1",
     ]) + if_rocm_is_configured(["TENSORFLOW_USE_ROCM=1"]),
     deps = [
+        "//third_party/llvm/llvm-project/llvm:Analysis",
+        "//third_party/llvm/llvm-project/llvm:BitReader",
+        "//third_party/llvm/llvm-project/llvm:BitWriter",
+        "//third_party/llvm/llvm-project/llvm:CodeGen",
+        "//third_party/llvm/llvm-project/llvm:Core",
+        "//third_party/llvm/llvm-project/llvm:IPO",
+        "//third_party/llvm/llvm-project/llvm:IRReader",
+        "//third_party/llvm/llvm-project/llvm:Linker",
+        "//third_party/llvm/llvm-project/llvm:MC",
+        "//third_party/llvm/llvm-project/llvm:NVPTXCodeGen",  # buildcleaner: keep
+        "//third_party/llvm/llvm-project/llvm:ObjCARC",  # buildcleaner: keep
+        "//third_party/llvm/llvm-project/llvm:Passes",
+        "//third_party/llvm/llvm-project/llvm:Scalar",
+        "//third_party/llvm/llvm-project/llvm:Support",
+        "//third_party/llvm/llvm-project/llvm:Target",
+        "//third_party/llvm/llvm-project/mlir:NVVMDialect",
         "//xla:status_macros",
         "//xla:types",
         "//xla:util",
@@ -54,22 +70,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/synchronization",
-        "@llvm-project//llvm:Analysis",
-        "@llvm-project//llvm:BitReader",
-        "@llvm-project//llvm:BitWriter",
-        "@llvm-project//llvm:CodeGen",
-        "@llvm-project//llvm:Core",
-        "@llvm-project//llvm:IPO",
-        "@llvm-project//llvm:IRReader",
-        "@llvm-project//llvm:Linker",
-        "@llvm-project//llvm:MC",
-        "@llvm-project//llvm:NVPTXCodeGen",  # buildcleaner: keep
-        "@llvm-project//llvm:ObjCARC",  # buildcleaner: keep
-        "@llvm-project//llvm:Passes",
-        "@llvm-project//llvm:Scalar",
-        "@llvm-project//llvm:Support",
-        "@llvm-project//llvm:Target",
-        "@llvm-project//mlir:NVVMDialect",
         "@local_config_cuda//cuda:cuda_headers",
         "@local_tsl//tsl/platform:cuda_libdevice_path",
         "@local_tsl//tsl/platform:env",
@@ -86,8 +86,8 @@ cc_library(
         "//xla/stream_executor/cuda:cuda_asm_compiler",
     ]) + if_rocm_is_configured([
         "@local_config_rocm//rocm:rocm_headers",
-        "@llvm-project//llvm:AMDGPUCodeGen",
-        "@llvm-project//llvm:AMDGPUAsmParser",
+        "//third_party/llvm/llvm-project/llvm:AMDGPUCodeGen",
+        "//third_party/llvm/llvm-project/llvm:AMDGPUAsmParser",
     ]),
 )
 
@@ -100,8 +100,8 @@ xla_cc_test(
     ],
     deps = [
         ":llvm_gpu_backend",
+        "//third_party/llvm/llvm-project/llvm:Core",
         "//xla/tests:xla_internal_test_main",
-        "@llvm-project//llvm:Core",
         "@local_tsl//tsl/platform:path",
         "@local_tsl//tsl/platform:test",
     ],
