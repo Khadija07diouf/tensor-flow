@@ -883,9 +883,9 @@ xla_test(
         ":hlo_test_base",
         ":test_macros_header",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:error_spec",
         "@com_google_absl//absl/strings",
-        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -905,9 +905,9 @@ xla_test(
         ":hlo_test_base",
         ":test_macros_header",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:error_spec",
         "@com_google_absl//absl/strings",
-        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -1449,9 +1449,9 @@ xla_test(
     deps = [
         ":client_library_test_base",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:test",
         "//xla/client:xla_builder",
-        "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/platform:ml_dtypes",
     ],
 )
@@ -1786,8 +1786,8 @@ xla_test(
         ":hlo_test_base",
         ":test_macros_header",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:error_spec",
-        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -1801,9 +1801,9 @@ xla_test(
         ":literal_test_util",
         ":test_macros_header",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:literal",
         "//xla:literal_util",
-        "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/platform:statusor",
     ],
 )
@@ -2034,6 +2034,8 @@ xla_test(
     tags = ["test_xla_cpu_thunks"],
     deps = [
         ":hlo_test_base",
+        ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:literal",
         "//xla:literal_util",
         "//xla/hlo/ir:hlo",
@@ -2041,7 +2043,6 @@ xla_test(
         "//xla/service:rng_expander",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings:string_view",
-        "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
     ],
@@ -2269,6 +2270,7 @@ xla_test(
     deps = [
         ":hlo_test_base",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:error_spec",
         "//xla:util",
         "//xla/hlo/ir:hlo",
@@ -2278,7 +2280,6 @@ xla_test(
         "//xla/service:hlo_pass_pipeline",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:string_view",
-        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -2375,6 +2376,7 @@ xla_test(
     deps = [
         ":hlo_test_base",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:literal",
         "//xla:literal_util",
         "//xla:shape_util",
@@ -2382,7 +2384,6 @@ xla_test(
         "//xla:test_helpers",
         "//xla/service:hlo_proto_cc",
         "@com_google_absl//absl/status",
-        "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/lib/core:status_test_util",
         "@local_tsl//tsl/platform:env",
         "@local_tsl//tsl/platform:status",
@@ -2519,6 +2520,7 @@ xla_test(
     ],
     deps = [
         ":hlo_test_base",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:literal_util",
         "//xla:test_helpers",
         "//xla/hlo/ir:hlo",
@@ -2527,7 +2529,6 @@ xla_test(
         "//xla/service:llvm_compiler",
         "//xla/stream_executor",
         "@com_google_absl//absl/status",
-        "@com_google_googletest//:gtest_main",
         "@llvm-project//llvm:Core",
         "@local_tsl//tsl/platform:casts",
         "@local_tsl//tsl/platform:env",
@@ -3142,6 +3143,7 @@ xla_test(
         ":hlo_test_base",
         ":literal_test_util",
         ":xla_internal_test_main",
+        "//testing/base/public:gunit_for_library_testonly",
         "//xla:literal",
         "//xla:literal_util",
         "//xla:shape_util",
@@ -3149,7 +3151,6 @@ xla_test(
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
-        "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/platform:status",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
