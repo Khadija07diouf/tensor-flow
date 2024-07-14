@@ -23,6 +23,7 @@ limitations under the License.
 #include <limits>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "absl/base/internal/endian.h"
@@ -59,11 +60,6 @@ constexpr uint64_t kLayerResolutions[] = {
 };
 
 constexpr int NumLevels() { return TF_ARRAYSIZE(kLayerResolutions); }
-constexpr uint64_t LayerResolutionPs(unsigned level) {
-  // This sometimes gets called in a tight loop, so levels are precomputed.
-  return level >= NumLevels() ? 0 : kLayerResolutions[level];
-}
-
 // Constants used by the LevelDB Table-based efficient trace viewer storage.
 static constexpr char kTraceMetadataKey[] = "/trace";
 static constexpr absl::string_view kLevelKey("123456789ABCDEFGHIJKLMNOPQ");
@@ -130,14 +126,23 @@ void MaybeAddEventUniqueId(std::vector<TraceEvent*>& events) {
 
 }  // namespace
 
-int GetLevelForDuration(uint64_t duration_ps) {
+uint64_t LayerResolutionPs(unsigned level) {
+  // This sometimes gets called in a tight loop, so levels are precomputed.
+  return level >= NumLevels() ? 0 : kLayerResolutions[level];
+}
+
+std::pair<uint64_t, uint64_t> GetLevelBoundsForDuration(uint64_t duration_ps) {
   int i = 0;
   for (; i < NumLevels(); ++i) {
     if (duration_ps > kLayerResolutions[i]) {
-      return i;
+      if (i == 0) {
+        return std::make_pair(kLayerResolutions[i], 0);
+      } else {
+        return std::make_pair(kLayerResolutions[i], kLayerResolutions[i - 1]);
+      }
     }
   }
-  return i;
+  return std::make_pair(0, 1);
 }
 
 std::vector<TraceEvent*> MergeEventTracks(
