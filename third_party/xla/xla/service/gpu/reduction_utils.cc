@@ -18,6 +18,7 @@ limitations under the License.
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <ostream>
 
 #include "absl/algorithm/container.h"
@@ -76,15 +77,30 @@ Vector3 PartitionShapeByMiddleDimensions(
 
 int64_t MinThreadsXRowReduction(const HloModuleConfig& hlo_module_config) {
 #ifdef GOOGLE_CUDA
-  auto ptxas_config =
-      PtxOptsFromDebugOptions(hlo_module_config.debug_options());
-  auto ptxas_version_tuple =
-      se::GetAsmCompilerVersion(ptxas_config.preferred_cuda_dir);
+  // The call to `GetAsmCompilerVersion` is expensive, but the result never
+  // changes during one execution and doesn't really depend on
+  // `hlo_module_config`. To avoid repeated calls, we cache the result is a
+  // static variable.
+  static std::optional<stream_executor::ToolVersion>* ptxas_version = nullptr;
+  if (ptxas_version == nullptr) {
+    auto ptxas_config =
+        PtxOptsFromDebugOptions(hlo_module_config.debug_options());
+    auto ptxas_version_tuple =
+        se::GetAsmCompilerVersion(ptxas_config.preferred_cuda_dir);
+
+    if (ptxas_version_tuple.ok()) {
+      ptxas_version = new std::optional<stream_executor::ToolVersion>(
+          ptxas_version_tuple.value());
+    } else {
+      ptxas_version = new std::optional<stream_executor::ToolVersion>();
+    }
+  }
+
   // ptxas versions prior to 12.2 have a very rare bug when very high register
   // spilling occurs with some order of instructions, so use less threads to
   // reduce register pressure.
-  if (!ptxas_version_tuple.ok() ||
-      ptxas_version_tuple.value() < std::array<int64_t, 3>{12, 2, 0}) {
+  if (ptxas_version->has_value() &&
+      ptxas_version->value() < std::array<int64_t, 3>{12, 2, 0}) {
     return 512;
   }
 #endif  // GOOGLE_CUDA
