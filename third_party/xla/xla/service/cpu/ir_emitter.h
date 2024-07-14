@@ -130,10 +130,10 @@ class IrEmitter : public DfsHloVisitorWithDefault,
       bool allow_reassociation,
       absl::Span<const llvm::Attribute::AttrKind> function_attributes = {});
 
-  llvm::IRBuilder<>* b() { return &b_; }
+  llvm::IRBuilder<>* b() { return b_.get(); }
 
   // builder() is for IrBuilderMixin.
-  llvm::IRBuilder<>* builder() { return &b_; }
+  llvm::IRBuilder<>* builder() { return b_.get(); }
 
   // Emit an LLVM global variable for every constant buffer allocation.
   absl::Status EmitConstantGlobals();
@@ -167,6 +167,35 @@ class IrEmitter : public DfsHloVisitorWithDefault,
   }
 
   const BufferAssignment& assignment() const { return assignment_; }
+
+  // ScopedBuilder is a RAII class that temporarily replaces the IRBuilder.
+  // This is convenient for reusing the same logic with a different builder.
+  class ScopedBuilder {
+   public:
+    explicit ScopedBuilder(IrEmitter* ir_emitter, llvm::IRBuilder<>& builder)
+        : ir_emitter_(ir_emitter),
+          original_builder_(std::move(ir_emitter->b_)) {
+      // No ownership of the temporary builder. This is going to be released.
+      ir_emitter_->b_ = std::unique_ptr<llvm::IRBuilder<>>(&builder);
+    }
+
+    ~ScopedBuilder() {
+      // We never declared to take ownership, so we don't need to do anything to
+      // the temporary builder.
+      ir_emitter_->b_.release();
+      ir_emitter_->b_ = std::move(original_builder_);
+    }
+
+   private:
+    IrEmitter* ir_emitter_;
+    std::unique_ptr<llvm::IRBuilder<>> original_builder_;
+  };
+
+  // WithBuilder is a convenience function that creates and returns a
+  // ScopedBuilder for the current IrEmitter.
+  [[nodiscard]] ScopedBuilder WithBuilder(llvm::IRBuilder<>& builder) {
+    return ScopedBuilder(this, builder);
+  }
 
  protected:
   friend class IrEmitter2;
@@ -245,7 +274,7 @@ class IrEmitter : public DfsHloVisitorWithDefault,
  private:
   absl::Status HandleSliceToDynamic(HloInstruction* hlo);
   absl::Status HandlePadToStatic(HloInstruction* hlo);
-  absl::Status HandleTopK(HloInstruction* hlo);
+  absl::Status HandleTopK(HloInstruction* hlo) override;
   absl::Status HandleAllReduceSingleReplica(HloInstruction* crs);
   absl::Status HandleAllReduceMultipleReplica(HloInstruction* crs);
 #if defined(INTEL_MKL) && defined(ENABLE_ONEDNN_V3)
@@ -549,7 +578,7 @@ class IrEmitter : public DfsHloVisitorWithDefault,
   // N.B. `b_` must be ordered before `compute_function_` as
   // `IrFunction::~IrFunction` references `b_`. This will ensure that the
   // destructor for `compute_function_` will run before the destructor for `b_`.
-  llvm::IRBuilder<> b_;
+  std::unique_ptr<llvm::IRBuilder<>> b_;
   std::unique_ptr<IrFunction> compute_function_;
   mlir::MLIRContext* mlir_context_;
   bool allow_reassociation_;
