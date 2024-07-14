@@ -35,6 +35,7 @@ limitations under the License.
 #include <string_view>
 #include <type_traits>
 #include <utility>
+#include <variant>
 #include <vector>
 
 #include "xla/ffi/api/c_api.h"
@@ -144,7 +145,7 @@ class Span {
 };
 
 //===----------------------------------------------------------------------===//
-// Error
+// Error and ErrorOr
 //===----------------------------------------------------------------------===//
 
 enum class ErrorCode : uint8_t {
@@ -188,6 +189,34 @@ class Error {
  private:
   ErrorCode errc_ = ErrorCode::kOk;
   std::string message_;
+};
+
+template <typename T>
+class ErrorOr {
+ public:
+  explicit ErrorOr(T value) : value_(std::move(value)) {}
+
+  explicit ErrorOr(Error error) : value_(std::move(error)) {
+    assert(error.failure() && "Error must be a failure");
+  }
+
+  T& value() { return std::get<T>(value_); }
+  const T& value() const { return std::get<T>(value_); }
+
+  T& operator*() { return value(); }
+  const T& operator*() const { return value(); }
+
+  T* operator->() { return &value(); }
+  const T* operator->() const { return &value(); }
+
+  Error& error() { return std::get<Error>(value_); }
+  const Error& error() const { return std::get<Error>(value_); }
+
+  bool has_value() const { return value_.index() == 0; }
+  bool has_error() const { return value_.index() == 1; }
+
+ private:
+  std::variant<T, Error> value_;
 };
 
 //===----------------------------------------------------------------------===//
@@ -573,8 +602,8 @@ struct AttrDecoding<Pointer<T>> {
 // Result encoding
 //===----------------------------------------------------------------------===//
 
-template <>
-struct ResultEncoding<Error> {
+template <ExecutionStage stage>
+struct ResultEncoding<stage, Error> {
   static XLA_FFI_Error* Encode(const XLA_FFI_Api* api, Error error) {
     if (error.success()) return nullptr;
 
