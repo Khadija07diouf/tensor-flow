@@ -3519,7 +3519,8 @@ PjRtStreamExecutorClient::Compile(mlir::ModuleOp module,
   TF_RETURN_IF_ERROR(MlirToXlaComputation(
       module, xla_computation,
       /*use_tuple_args=*/options.parameter_is_tupled_arguments,
-      /*return_tuple=*/false));
+      /*return_tuple=*/false,
+      options.executable_build_options.debug_options().xla_use_shardonnay()));
   return Compile(xla_computation, options);
 }
 
